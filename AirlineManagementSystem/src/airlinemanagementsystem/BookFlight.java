@@ -143,12 +143,12 @@ public class BookFlight extends JFrame implements ActionListener{
         dcdate.setBounds(220, 530, 150, 25);
         add(dcdate);
         
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("airlinemanagementsystem/icons/details.jpg"));
-        Image i2 = i1.getImage().getScaledInstance(450, 320, Image.SCALE_DEFAULT);
-        ImageIcon image = new ImageIcon(i2);
-        JLabel lblimage = new JLabel(image);
-        lblimage.setBounds(550, 80, 500, 410);
-        add(lblimage);
+//        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("airlinemanagementsystem/icons/details.jpg"));
+//        Image i2 = i1.getImage().getScaledInstance(450, 320, Image.SCALE_DEFAULT);
+//        ImageIcon image = new ImageIcon(i2);
+//        JLabel lblimage = new JLabel(image);
+//        lblimage.setBounds(550, 80, 500, 410);
+//        add(lblimage);
         
         bookflight = new JButton("Book Flight");
         bookflight.setBackground(Color.BLACK);

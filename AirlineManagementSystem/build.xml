@@ -70,4 +70,66 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+
+<!--    <property name="jcalendar.jar" value="lib/jcalendar.jar"/>
+    <property name="rs2xml.jar" value="lib/rs2xml.jar"/>
+    <property name="mysql-connector-j-9.1.0.jar" value="lib/mysql-connector-j-9.1.0.jar"/>
+
+    
+
+    <path id="project.classpath">
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${jcalendar.jar}"/>
+        <pathelement location="${rs2xml.jar}"/>        
+        <pathelement location="${mysql-connector-j-9.1.0}"/>
+
+    </path>
+
+    <target name="compile" depends="init">
+        <mkdir dir="${build.classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" includeantruntime="false">
+            <classpath>
+                <path refid="project.classpath"/>
+            </classpath>
+        </javac>
+    </target>
+    -->
+    
+    <!-- Definir propiedades de directorios -->
+    <property name="src.dir" value="src"/> <!-- Ajusta esto según el nombre de tu carpeta de código fuente -->
+    <property name="build.classes.dir" value="build/classes"/>
+
+    <!-- Definir propiedades para los JAR -->
+    <property name="jcalendar.jar" value="lib/jcalendar.jar"/>
+    <property name="rs2xml.jar" value="lib/rs2xml.jar"/>
+    <property name="mysql-connector-j.jar" value="lib/mysql-connector-j-9.1.0.jar"/>
+
+    <!-- Definir el classpath del proyecto -->
+    <path id="project.classpath">
+        <fileset dir="lib" includes="*.jar"/>
+    </path>
+
+    <!-- Tarea de compilación -->
+    <target name="compile">
+        <mkdir dir="${build.classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" includeantruntime="false">
+            <classpath refid="project.classpath"/>
+        </javac>
+    </target>
+
+    <!-- Tarea de ejecución -->
+    <target name="run" depends="compile">
+        <java classname="airlinemanagementsystem.AirlineManagementSystem" fork="true">
+            <classpath>
+                <path refid="project.classpath"/>
+                <pathelement path="${build.classes.dir}"/>
+            </classpath>
+        </java>
+    </target>
+
+
+
 </project>

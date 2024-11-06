@@ -23,12 +23,12 @@ public class Cancel extends JFrame implements ActionListener{
         heading.setFont(new Font("Tahoma", Font.PLAIN, 32));
         add(heading);
         
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("airlinemanagementsystem/icons/cancel.jpg"));
-        Image i2 = i1.getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT);
-        ImageIcon i3 = new ImageIcon(i2);
-        JLabel image = new JLabel(i3);
-        image.setBounds(470, 120, 250, 250);
-        add(image);
+//        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("airlinemanagementsystem/icons/cancel.jpg"));
+//        Image i2 = i1.getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT);
+//        ImageIcon i3 = new ImageIcon(i2);
+//        JLabel image = new JLabel(i3);
+//        image.setBounds(470, 120, 250, 250);
+//        add(image);
         
         JLabel lblaadhar = new JLabel("PNR Number");
         lblaadhar.setBounds(60, 80, 150, 25);
