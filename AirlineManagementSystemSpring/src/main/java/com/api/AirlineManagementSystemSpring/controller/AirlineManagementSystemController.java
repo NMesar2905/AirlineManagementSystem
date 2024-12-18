@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.AirlineManagementSystemSpring.dto.FlightListInfo;
+import com.api.AirlineManagementSystemSpring.dto.CancelReservationDTO;
 import com.api.AirlineManagementSystemSpring.dto.PassengerDTO;
 import com.api.AirlineManagementSystemSpring.dto.ReservationDTO;
 import com.api.AirlineManagementSystemSpring.entities.Passenger;
@@ -26,6 +28,10 @@ import com.api.AirlineManagementSystemSpring.repository.PassengerRepository;
 import com.api.AirlineManagementSystemSpring.repository.ReservationRepository;
 import com.api.AirlineManagementSystemSpring.services.CancelService;
 import com.api.AirlineManagementSystemSpring.services.ReservationService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/ams")
@@ -46,11 +52,17 @@ public class AirlineManagementSystemController {
 	@Autowired
 	private CancelService cancelService;
 
+	@Operation(summary = "Obtener la lista de vuelos disponibles", description = "Devuelve una lista de vuelos con información básica.")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Lista de vuelos obtenida exitosamente"),
+			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
 	@GetMapping("/flights")
 	public List<FlightListInfo> getFlightList() {
 		return flightRepository.findAll().stream().map(FlightListInfo::new).toList();
 	}
 
+	@Operation(summary = "Crear un nuevo pasajero", description = "Crea un nuevo pasajero si el Aadhar ID no existe en la base de datos.")
+	@ApiResponses({ @ApiResponse(responseCode = "201", description = "Pasajero creado exitosamente"),
+			@ApiResponse(responseCode = "409", description = "Pasajero con el mismo Aadhar ID ya existe") })
 	@PostMapping("/passenger/creation")
 	public ResponseEntity<?> createPassenger(@RequestBody PassengerDTO passengerDTO) {
 
@@ -64,6 +76,9 @@ public class AirlineManagementSystemController {
 
 	}
 
+	@Operation(summary = "Crear una nueva reservación de vuelo", description = "Permite al pasajero reservar un vuelo.")
+	@ApiResponses({ @ApiResponse(responseCode = "201", description = "Reservación creada exitosamente"),
+			@ApiResponse(responseCode = "409", description = "Conflicto al crear la reservación") })
 	@PostMapping("/passenger/reservation")
 	public ResponseEntity<?> createReservation(@RequestBody ReservationDTO reservationDTO) {
 		try {
@@ -74,10 +89,13 @@ public class AirlineManagementSystemController {
 		}
 	}
 
+	@Operation(summary = "Obtener detalles de viaje", description = "Devuelve información detallada del viaje usando un PNR proporcionado.")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Detalles del viaje obtenidos exitosamente"),
+			@ApiResponse(responseCode = "404", description = "No se encontró la información del viaje") })
 	@GetMapping("/passenger/journey-details")
-	public ResponseEntity<?> journeyDetails(@RequestBody Map<String, String> requestBody) {
+	public ResponseEntity<?> journeyDetails(@RequestParam String PNR) {
 		try {
-			Reservation reservation = reservationRepository.findById(requestBody.get("PNR"))
+			Reservation reservation = reservationRepository.findById(PNR)
 					.orElseThrow(() -> new ResourceNotFoundException("Not information found"));
 			return ResponseEntity.ok(reservation);
 		} catch (Exception e) {
@@ -85,10 +103,13 @@ public class AirlineManagementSystemController {
 		}
 	}
 
+	@Operation(summary = "Cancelar una reservación", description = "Permite cancelar una reservación existente usando el PNR.")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Reservación cancelada exitosamente"),
+			@ApiResponse(responseCode = "409", description = "No se pudo cancelar la reservación") })
 	@DeleteMapping("/passenger/cancel")
-	public ResponseEntity<?> cancelReservation(@RequestBody Map<String, String> requestBody) {
+	public ResponseEntity<?> cancelReservation(@RequestBody CancelReservationDTO cancelReservationDTO) {
 		try {
-			cancelService.cancelReservation(requestBody);
+			cancelService.cancelReservation(cancelReservationDTO);
 			return ResponseEntity.ok("Ticket Cancelled");
 		} catch (ResourceNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
