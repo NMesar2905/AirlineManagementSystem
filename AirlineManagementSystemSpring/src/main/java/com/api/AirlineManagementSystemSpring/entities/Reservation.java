@@ -3,6 +3,8 @@ package com.api.AirlineManagementSystemSpring.entities;
 import java.sql.Date;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,7 +20,9 @@ import lombok.NoArgsConstructor;
 public class Reservation {
 
 	@Id
+	@JsonProperty("pnr")
 	private String PNR;
+	@JsonProperty("tic")
 	private String TIC;
 	private Integer aadhar;
 	private String name;
@@ -36,7 +40,7 @@ public class Reservation {
 		this.TIC = "TIC-" + random.nextInt(10000);
 		this.aadhar = aadhar;
 		this.name = name;
-		this.nationality = nationality;
+		this.nationality = nationality; 
 		this.flightname = flightname;
 		this.flightcode = flightcode;
 		this.src = src;

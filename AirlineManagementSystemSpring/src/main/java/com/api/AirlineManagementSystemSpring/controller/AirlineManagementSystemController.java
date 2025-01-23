@@ -1,12 +1,9 @@
 package com.api.AirlineManagementSystemSpring.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +29,7 @@ import com.api.AirlineManagementSystemSpring.services.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/ams")
@@ -66,7 +64,9 @@ public class AirlineManagementSystemController {
 	@PostMapping("/passenger/creation")
 	public ResponseEntity<?> createPassenger(@RequestBody PassengerDTO passengerDTO) {
 
-		if (passengerRepository.existsById(passengerDTO.aadhar())) {
+		if (passengerDTO.aadhar() == null || passengerDTO.name() == null) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("The Aadhar or Name fields cannot be null or empty");
+		} else if (passengerRepository.existsById(passengerDTO.aadhar())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT)
 					.body("Passenger with Aadhar " + passengerDTO.aadhar() + " already exists.");
 		} else {
@@ -80,13 +80,15 @@ public class AirlineManagementSystemController {
 	@ApiResponses({ @ApiResponse(responseCode = "201", description = "Reservación creada exitosamente"),
 			@ApiResponse(responseCode = "409", description = "Conflicto al crear la reservación") })
 	@PostMapping("/passenger/reservation")
-	public ResponseEntity<?> createReservation(@RequestBody ReservationDTO reservationDTO) {
+	public ResponseEntity<?> createReservation(@RequestBody @Valid ReservationDTO reservationDTO) {
+		System.out.println("Validación pasada, llamando al servicio...");
 		try {
-			reservationService.createReservation(reservationDTO);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Customer Reservation Created Succesfully");
+			Reservation reservation = reservationService.createReservation(reservationDTO);
+			return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
 		} catch (ResourceNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
+
 	}
 
 	@Operation(summary = "Obtener detalles de viaje", description = "Devuelve información detallada del viaje usando un PNR proporcionado.")
@@ -94,12 +96,16 @@ public class AirlineManagementSystemController {
 			@ApiResponse(responseCode = "404", description = "No se encontró la información del viaje") })
 	@GetMapping("/passenger/journey-details")
 	public ResponseEntity<?> journeyDetails(@RequestParam String PNR) {
-		try {
-			Reservation reservation = reservationRepository.findById(PNR)
-					.orElseThrow(() -> new ResourceNotFoundException("Not information found"));
-			return ResponseEntity.ok(reservation);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		if (PNR.isBlank()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The PNR cannot be empty");
+		} else {
+			try {
+				Reservation reservation = reservationRepository.findById(PNR)
+						.orElseThrow(() -> new ResourceNotFoundException("Not information found"));
+				return ResponseEntity.ok(reservation);
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+			}
 		}
 	}
 
@@ -108,11 +114,16 @@ public class AirlineManagementSystemController {
 			@ApiResponse(responseCode = "409", description = "No se pudo cancelar la reservación") })
 	@DeleteMapping("/passenger/cancel")
 	public ResponseEntity<?> cancelReservation(@RequestBody CancelReservationDTO cancelReservationDTO) {
-		try {
-			cancelService.cancelReservation(cancelReservationDTO);
-			return ResponseEntity.ok("Ticket Cancelled");
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		if (cancelReservationDTO.PNR().isBlank()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PNR cannot be empty");
+		} else {
+
+			try {
+				cancelService.cancelReservation(cancelReservationDTO);
+				return ResponseEntity.ok("Ticket Cancelled");
+			} catch (ResourceNotFoundException e) {
+				return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+			}
 		}
 	}
 
