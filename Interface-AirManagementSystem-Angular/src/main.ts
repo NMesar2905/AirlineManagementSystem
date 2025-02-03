@@ -4,9 +4,12 @@ import { AppComponent } from './app/app.component';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
 
-bootstrapApplication(AppComponent, { 
+// bootstrapApplication(AppComponent, { 
 
-  providers: [provideRouter(routes)],
+//   providers: [provideRouter(routes)],
 
-})
-  .catch((err) => console.error(err));
+// })
+//   .catch((err) => console.error(err));
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error(err));

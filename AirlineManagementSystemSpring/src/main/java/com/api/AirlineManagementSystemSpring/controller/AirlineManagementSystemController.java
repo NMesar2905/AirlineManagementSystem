@@ -3,6 +3,7 @@ package com.api.AirlineManagementSystemSpring.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -70,8 +71,15 @@ public class AirlineManagementSystemController {
 			return ResponseEntity.status(HttpStatus.CONFLICT)
 					.body("Passenger with Aadhar " + passengerDTO.aadhar() + " already exists.");
 		} else {
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "text/plain");
+			headers.add("Charset", "UTF-8");
+			
 			passengerRepository.save(new Passenger(passengerDTO));
-			return ResponseEntity.status(HttpStatus.CREATED).body("Customer Details Added Succesfully");
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.headers(headers)
+					.body("Customer Details Added Succesfully");
 		}
 
 	}

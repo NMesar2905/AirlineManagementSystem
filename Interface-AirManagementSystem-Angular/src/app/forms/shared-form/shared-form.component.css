@@ -1,0 +1,104 @@
+div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    background: #f4f4f4;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+label {
+    text-align: left;
+    font-weight: bold;
+}
+
+
+
+button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border: none;
+    background: #264769;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+select {
+    width: 100%;
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background: #fff;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.table_component {
+    overflow: auto;
+    width: 50%;
+    padding: 20px;
+    align-items: center;
+    display: flex;
+}
+
+.table_component table {
+    border: 1px solid #a9a9b1;
+    width: 50%;
+    margin: 0 auto;
+    table-layout: fixed;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.table_component td {
+    padding: 10px;
+    border: 1px solid #a9a9b1;
+}
+
+.table_component .label-cell {
+    background-color: #264769;
+    color: #ffffff;
+    font-weight: bold;
+    width: 30%;
+}
+
+.table_component td:not(.label-cell) {
+    vertical-align: middle;
+    text-align: center;
+}

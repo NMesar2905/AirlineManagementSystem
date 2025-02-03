@@ -1,0 +1,141 @@
+<div *ngIf="!formSubmitted">
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+    
+        <div *ngIf="formType === 'newPassenger'">
+            <section>
+                <label>Name:</label>
+                <input type="text" formControlName="name">
+            </section>
+            
+            <section>
+                <label>Nationality:</label>
+                <input type="text" formControlName="nationality">
+            </section>
+    
+            <section>
+                <label>Phone:</label>
+                <input type="text" formControlName="phone">
+            </section>
+    
+            <section>
+                <label>Address</label>
+                <input type="text" formControlName="address">
+            </section>
+    
+            <section>
+                <label>Aadhar:</label>
+                <input type="number" formControlName="aadhar">
+            </section>
+           
+            <section>
+                <label>Gender:</label>
+                <select id="gender" formControlName ="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </section> 
+            
+        </div>
+
+        <div *ngIf="formType === 'flightReservation'">
+            <section>
+                <label>Aadhar:</label>
+                <input type="text" formControlName="aadhar">
+            </section>
+            
+            <section>
+                <label>Source:</label>
+                <input type="text" formControlName="src">
+            </section>
+    
+            <section>
+                <label>Destination:</label>
+                <input type="text" formControlName="des">
+            </section>
+    
+            <section>
+                <label>Date:</label>
+                <input type="date" formControlName="ddate">
+            </section>
+    
+        </div>
+        
+    
+        <button type="submit" [disabled]="form.invalid">Submit</button>
+    </form>
+</div>
+
+<div *ngIf="formSubmitted">
+    <div *ngIf="formType === 'newPassenger'">
+        <div *ngIf="responseMessage">
+            <p>{{ responseMessage }}</p>
+            <button [routerLink]="ROUTES.BOOK_FLIGHT">Book Flight</button>
+        </div>
+        
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p> 
+        <button (click)="formSubmitted = false">Create Another Passenger</button>
+    </div>
+
+    <div *ngIf="formType === 'flightReservation'">
+        <div *ngIf="responseMessage">
+            <p>{{ responseMessage }}</p>
+            
+            <div class="table_component">
+                <table *ngIf="reservationInfo">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">PNR</td>
+                            <td>{{reservationInfo.pnr}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">TIC</td>
+                            <td>{{reservationInfo.tic}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Aadhar</td>
+                            <td>{{reservationInfo.aadhar}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Name</td>
+                            <td>{{reservationInfo.name}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Nationality</td>
+                            <td>{{reservationInfo.nationality}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Flight Name</td>
+                            <td>{{reservationInfo.flightname}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Flight Code</td>
+                            <td>{{reservationInfo.flightcode}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Source</td>
+                            <td>{{reservationInfo.src}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Destination</td>
+                            <td>{{reservationInfo.des}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Date</td>
+                            <td>{{reservationInfo.ddate}}</td>
+                        </tr>
+                    </tbody>
+                  </table> 
+            </div>
+
+            <button [routerLink]="ROUTES.HOME">Home</button>
+        </div>
+        
+        <div *ngIf="errorMessage">
+            <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p> 
+            <button (click)="formSubmitted = false">Book New Flight</button>
+        </div>
+    </div>
+</div>
+

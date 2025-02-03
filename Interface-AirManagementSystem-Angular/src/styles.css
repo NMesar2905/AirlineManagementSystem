@@ -13,7 +13,8 @@ button {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
-    margin: 10px;
+    margin: 5px;
+    font-size: medium;
 }
 
 #navigation-buttons{
@@ -99,4 +100,47 @@ footer {
     padding: 10px;
     width: 100%;
     margin-top: auto;  
+}
+
+.table_component {
+    overflow: auto;
+    width: 100%;
+    padding: 20px;
+    align-items: center;
+    display: flex;
+}
+
+.table_component table {
+    border: 1px solid #a9a9b1;
+    height: 50%;
+    width: 50%;
+    margin: 0 auto;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    text-align: left;
+}
+
+.table_component caption {
+    caption-side: top;
+    text-align: center;
+}
+
+.table_component th {
+    background-color: #264769;
+    color: #ffffff;
+    padding: 5px;
+}
+
+.table_component th, .table_component td{
+    padding: 10px;
+    border: 1px solid #a9a9b1;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
