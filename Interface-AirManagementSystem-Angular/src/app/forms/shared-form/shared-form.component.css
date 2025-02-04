@@ -102,3 +102,9 @@ input, select {
     vertical-align: middle;
     text-align: center;
 }
+
+.form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }

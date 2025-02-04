@@ -18,6 +18,7 @@ import com.api.AirlineManagementSystemSpring.dto.FlightListInfo;
 import com.api.AirlineManagementSystemSpring.dto.CancelReservationDTO;
 import com.api.AirlineManagementSystemSpring.dto.PassengerDTO;
 import com.api.AirlineManagementSystemSpring.dto.ReservationDTO;
+import com.api.AirlineManagementSystemSpring.entities.Cancelation;
 import com.api.AirlineManagementSystemSpring.entities.Passenger;
 import com.api.AirlineManagementSystemSpring.entities.Reservation;
 import com.api.AirlineManagementSystemSpring.exceptions.ResourceNotFoundException;
@@ -89,7 +90,6 @@ public class AirlineManagementSystemController {
 			@ApiResponse(responseCode = "409", description = "Conflicto al crear la reservación") })
 	@PostMapping("/passenger/reservation")
 	public ResponseEntity<?> createReservation(@RequestBody @Valid ReservationDTO reservationDTO) {
-		System.out.println("Validación pasada, llamando al servicio...");
 		try {
 			Reservation reservation = reservationService.createReservation(reservationDTO);
 			return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
@@ -122,13 +122,13 @@ public class AirlineManagementSystemController {
 			@ApiResponse(responseCode = "409", description = "No se pudo cancelar la reservación") })
 	@DeleteMapping("/passenger/cancel")
 	public ResponseEntity<?> cancelReservation(@RequestBody CancelReservationDTO cancelReservationDTO) {
-		if (cancelReservationDTO.PNR().isBlank()) {
+		if (cancelReservationDTO.pnr().isBlank()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PNR cannot be empty");
 		} else {
 
 			try {
-				cancelService.cancelReservation(cancelReservationDTO);
-				return ResponseEntity.ok("Ticket Cancelled");
+				Cancelation cancelation = cancelService.cancelReservation(cancelReservationDTO);
+				return ResponseEntity.ok(cancelation);
 			} catch (ResourceNotFoundException e) {
 				return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 			}

@@ -23,7 +23,7 @@ public class CancelService {
 
 	public Cancelation cancelReservation(CancelReservationDTO cancelReservationDTO) {
 
-		Reservation reservation = reservationRepository.findById(cancelReservationDTO.PNR())
+		Reservation reservation = reservationRepository.findById(cancelReservationDTO.pnr())
 				.orElseThrow(() -> new ResourceNotFoundException("Please enter correct PNR"));
 
 		Cancelation cancelation = new Cancelation(reservation.getPNR(), reservation.getName(),

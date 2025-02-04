@@ -22,6 +22,7 @@ export class SharedFormComponent implements OnInit{
   responseMessage: string = '';
   errorMessage: string = '';
   reservationInfo: any = null;
+  cancelationInfo: any = null;
   
   constructor(private fb: FormBuilder, private airIndiaFlightService: AirIndiaFlightService){}
 
@@ -48,6 +49,18 @@ export class SharedFormComponent implements OnInit{
           src: ['', Validators.required],
           des: ['', Validators.required],
           ddate: ['', Validators.required]
+        });
+        break;
+      
+      case 'reservationInfo':
+        this.form = this.fb.group({
+          pnr: ['', Validators.required]
+        });
+        break;
+
+      case 'cancelReservation':
+        this.form = this.fb.group({
+          pnr: ['', Validators.required]
         });
         break;
 
@@ -83,10 +96,11 @@ export class SharedFormComponent implements OnInit{
           });
           break;
 
-          case 'flightReservation':
+        case 'flightReservation':
           this.airIndiaFlightService.bookFlight(this.form.value).subscribe({
             next: (response) => {
               console.log('Form sent: ', response);
+              this.errorMessage = '';
               if (typeof response === 'string'){
                 this.responseMessage =   response;
               }else{
@@ -102,14 +116,67 @@ export class SharedFormComponent implements OnInit{
               if(error.error){
                 this.errorMessage = error.error;
               }else{
-                this.errorMessage = 'There was an error booking the flight. Please try again';
+                this.errorMessage = 'There was an error booking the flight. Please try again.';
               }
               this.formSubmitted = true;
               this.form.reset();
             }
           });
           break;
-      }
-    
+      
+        case 'reservationInfo':
+            this.airIndiaFlightService.flightInfo(this.form.value.pnr).subscribe({
+              next: (response) => {
+                console.log('Form sent: ', response);
+                this.errorMessage = '';
+                if (typeof response === 'string'){
+                  this.responseMessage =   response;
+                }else{
+                  this.responseMessage = 'Here is the information of your Journey'
+                  this.reservationInfo =   response;
+                }
+
+                this.formSubmitted = true;
+                this.form.reset();
+              },
+              error: (error) => {
+                console.error('Error sending data', error);
+                if(error.error){
+                  this.errorMessage = error.error;
+                }else{
+                  this.errorMessage = 'There was an error getting the information of your reservation. Please try again.';
+                }
+                this.formSubmitted = true;
+                this.form.reset();
+              }
+            });
+            break;
+        case 'cancelReservation':
+          this.airIndiaFlightService.cancelFlight(this.form.value).subscribe({
+              next: (response) =>{
+                console.log("Form sent ", response);
+                this.errorMessage='';
+                if(response === 'string'){
+                  this.responseMessage = response;
+                }else{
+                  this.responseMessage = 'Here is your cancellation information';
+                  this.cancelationInfo = response;
+                }
+                this.formSubmitted = true;
+                this.form.reset();
+              },
+              error: (error) => {
+                console.error('Error sending data', error);
+                if(error.error){
+                  this.errorMessage = error.error;
+                }else{
+                  this.errorMessage = 'There was a problem canceling your flight.';
+                }
+                this.formSubmitted = true;
+                this.form.reset();
+              }
+          });
+          break;
+        }    
   }
 }

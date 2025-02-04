@@ -40,7 +40,7 @@
         <div *ngIf="formType === 'flightReservation'">
             <section>
                 <label>Aadhar:</label>
-                <input type="text" formControlName="aadhar">
+                <input type="number" formControlName="aadhar">
             </section>
             
             <section>
@@ -60,6 +60,19 @@
     
         </div>
         
+        <div *ngIf="formType === 'reservationInfo'">
+            <section>
+                <label>PNR:</label>
+                <input type="text" formControlName="pnr">
+            </section>
+        </div>
+
+        <div *ngIf="formType === 'cancelReservation'">
+            <section>
+                <label>PNR:</label>
+                <input type="text" formControlName="pnr">
+            </section>
+        </div>
     
         <button type="submit" [disabled]="form.invalid">Submit</button>
     </form>
@@ -76,7 +89,7 @@
         <button (click)="formSubmitted = false">Create Another Passenger</button>
     </div>
 
-    <div *ngIf="formType === 'flightReservation'">
+    <div *ngIf="formType === 'flightReservation' || formType === 'reservationInfo'">
         <div *ngIf="responseMessage">
             <p>{{ responseMessage }}</p>
             
@@ -129,13 +142,83 @@
                   </table> 
             </div>
 
-            <button [routerLink]="ROUTES.HOME">Home</button>
-        </div>
-        
-        <div *ngIf="errorMessage">
-            <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p> 
-            <button (click)="formSubmitted = false">Book New Flight</button>
+            <section class="form-buttons">
+                <button [routerLink]="ROUTES.HOME">Home</button>
+                <div *ngIf="formType === 'flightReservation'">
+                    <button (click)="formSubmitted = false">Book New Flight</button>
+                </div>
+                <div *ngIf="formType === 'reservationInfo'">
+                    <button (click)="formSubmitted = false">Check another flight</button>
+                </div>
+            </section>
         </div>
     </div>
+
+    <div *ngIf="formType === 'cancelReservation'">
+        <div *ngIf="responseMessage">
+            <p>{{ responseMessage }}</p>
+            
+            <div class="table_component">
+                <table *ngIf="cancelationInfo">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-cell">Cancel Number</td>
+                            <td>{{cancelationInfo.cancelno}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">PNR</td>
+                            <td>{{cancelationInfo.pnr}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Name</td>
+                            <td>{{cancelationInfo.name}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Flight Code</td>
+                            <td>{{cancelationInfo.fcode}}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Date</td>
+                            <td>{{cancelationInfo.date}}</td>
+                        </tr>
+                    </tbody>
+                  </table> 
+            </div>
+
+            <section class="form-buttons">
+                <button [routerLink]="ROUTES.HOME">Home</button>
+                <button (click)="formSubmitted = false">Cancel a Flight</button>
+            </section>
+        </div>
+
+        <div *ngIf="formType === 'cancelReservation' && errorMessage">        
+            <p class="error">{{ errorMessage }}</p>
+            <section class="form-buttons">
+                <button [routerLink]="ROUTES.HOME">Home</button>
+                <button (click)="formSubmitted = false">Cancel a Flight</button>
+            </section> 
+        </div>
+
+    </div>
+
+    <div *ngIf="formType === 'flightReservation' && errorMessage">
+        <p class="error">{{ errorMessage }}</p> 
+        <section class="form-buttons">
+            <button [routerLink]="ROUTES.HOME">Home</button>
+            <button (click)="formSubmitted = false">Book New Flight</button>
+        </section>
+        
+    </div>
+
+    <div *ngIf="formType === 'reservationInfo' && errorMessage">        
+        <p class="error">{{ errorMessage }}</p> 
+        <section>
+            <button [routerLink]="ROUTES.HOME">Home</button>
+            <button (click)="formSubmitted = false">Check another flight</button>            
+        </section>
+    </div>
+    
 </div>
 
