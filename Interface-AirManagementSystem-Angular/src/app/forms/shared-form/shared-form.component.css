@@ -95,7 +95,7 @@ input, select {
     background-color: #264769;
     color: #ffffff;
     font-weight: bold;
-    width: 30%;
+    width: 40%;
 }
 
 .table_component td:not(.label-cell) {

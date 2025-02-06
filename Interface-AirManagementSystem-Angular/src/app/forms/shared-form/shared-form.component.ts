@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AirIndiaFlightService } from '../../services/air-india-flight.service';
 import { RouterLink } from '@angular/router';
 import { ROUTES } from '../../routes.constants';
+import { Flight } from '../../models/flight';
 
 @Component({
   selector: 'app-shared-form',
@@ -23,11 +24,27 @@ export class SharedFormComponent implements OnInit{
   errorMessage: string = '';
   reservationInfo: any = null;
   cancelationInfo: any = null;
-  
+  flights: Flight[] = [];
+  destinations = new Set();
+  sources = new Set();
+
   constructor(private fb: FormBuilder, private airIndiaFlightService: AirIndiaFlightService){}
 
   ngOnInit(): void{
-    this.createForm();
+    this.createForm();    
+    this.populateSourcesAndDestinations();
+  }
+
+  private populateSourcesAndDestinations(): void{
+    this.airIndiaFlightService.getFligthList().subscribe({
+      next : (response) => {this.flights = response
+        this.flights.forEach(flight => {
+          this.destinations.add(flight.destination);
+          this.sources.add(flight.source);
+        })
+      },
+      error: (error) => console.error ('Error getting flights: ', error)
+    });
   }
 
   createForm(){

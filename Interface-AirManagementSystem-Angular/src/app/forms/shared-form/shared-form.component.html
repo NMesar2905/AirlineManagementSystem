@@ -45,12 +45,16 @@
             
             <section>
                 <label>Source:</label>
-                <input type="text" formControlName="src">
+                <select id="src" formControlName ="src">
+                    <option *ngFor="let source of sources">{{source}}</option>
+                </select>
             </section>
     
             <section>
                 <label>Destination:</label>
-                <input type="text" formControlName="des">
+                <select id="des" formControlName ="des">
+                    <option *ngFor="let destination of destinations">{{destination}}</option>
+                </select>
             </section>
     
             <section>
