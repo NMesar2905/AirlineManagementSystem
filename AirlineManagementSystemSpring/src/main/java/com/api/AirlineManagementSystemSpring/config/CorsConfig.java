@@ -15,7 +15,7 @@ public class CorsConfig {
 			 @Override
 			 public void addCorsMappings(CorsRegistry registry) {
 				 registry.addMapping("/**")
-				 		 .allowedOrigins("http://localhost:4200")
+				 		 .allowedOrigins("http://airline-system-interface:80","http://localhost:9999")
 				 		 .allowedMethods("GET", "POST", "PUT", "DELETE")
 				 		 .allowedHeaders("*");
 			 }

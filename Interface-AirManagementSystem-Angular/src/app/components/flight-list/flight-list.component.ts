@@ -21,7 +21,7 @@ export class FlightListComponent implements OnInit{
   getFlightList(){
     this.airIndiaFlightService.getFligthList().subscribe({
       next: (data) => this.fligths= data,
-      error: (err) => console.error ('Error obteniendo vuelos: ', err)
+      error: (err) => console.error ('Error getting flights: ', err)
     });
   }
 

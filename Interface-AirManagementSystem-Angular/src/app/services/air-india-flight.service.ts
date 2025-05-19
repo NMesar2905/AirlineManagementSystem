@@ -10,7 +10,7 @@ import { FlightCancel } from '../models/flightCancel';
 export class AirIndiaFlightService {
 
   constructor(private http: HttpClient) {}
-  private apiUrl = 'http://localhost:8080/ams';
+  private apiUrl = '/ams';
   
   getFligthList(): Observable<Flight[]>{
     const flightsURL: string = `${this.apiUrl}/flights`

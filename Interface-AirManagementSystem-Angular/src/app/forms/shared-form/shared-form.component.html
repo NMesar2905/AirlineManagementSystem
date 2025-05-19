@@ -94,9 +94,10 @@
     </div>
 
     <div *ngIf="formType === 'flightReservation' || formType === 'reservationInfo'">
-        <div *ngIf="responseMessage">
+        <div *ngIf="responseMessage && !reservationInfo">
             <p>{{ responseMessage }}</p>
-            
+        </div>
+        <div *ngIf="reservationInfo">
             <div class="table_component">
                 <table *ngIf="reservationInfo">
                     <thead>

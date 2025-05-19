@@ -142,32 +142,35 @@ export class SharedFormComponent implements OnInit{
           break;
       
         case 'reservationInfo':
-            this.airIndiaFlightService.flightInfo(this.form.value.pnr).subscribe({
-              next: (response) => {
-                console.log('Form sent: ', response);
-                this.errorMessage = '';
-                if (typeof response === 'string'){
-                  this.responseMessage =   response;
-                }else{
-                  this.responseMessage = 'Here is the information of your Journey'
-                  this.reservationInfo =   response;
-                }
-
-                this.formSubmitted = true;
-                this.form.reset();
-              },
-              error: (error) => {
-                console.error('Error sending data', error);
-                if(error.error){
-                  this.errorMessage = error.error;
-                }else{
-                  this.errorMessage = 'There was an error getting the information of your reservation. Please try again.';
-                }
-                this.formSubmitted = true;
-                this.form.reset();
+          this.responseMessage = '';
+          this.errorMessage = '';
+          this.reservationInfo = null;
+          this.airIndiaFlightService.flightInfo(this.form.value.pnr).subscribe({
+            next: (response) => {
+              console.log('Form sent: ', response);
+              if (typeof response === 'string'){
+                this.responseMessage =   response;
+              }else{
+                this.responseMessage = 'Here is the information of your Journey'
+                this.reservationInfo =   response;
               }
-            });
-            break;
+
+              this.formSubmitted = true;
+              this.form.reset();
+            },
+            error: (error) => {
+              console.error('Error sending data', error);
+              this.responseMessage = ''
+              if(error.error){
+                this.errorMessage = error.error;
+              }else{
+                this.errorMessage = 'There was an error getting the information of your reservation. Please try again.';
+              }
+              this.formSubmitted = true;
+              this.form.reset();
+            }
+          });
+          break;
         case 'cancelReservation':
           this.airIndiaFlightService.cancelFlight(this.form.value).subscribe({
               next: (response) =>{
